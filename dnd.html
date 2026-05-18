@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Le Journal - Damien</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <nav style="padding: 20px;">
+        <a href="index.html" style="color: var(--text-color); text-decoration: none; font-family: 'Cinzel', serif;">←
+            Retour au portfolio</a>
+    </nav>
+
+    <main class="contact-container">
+        <header class="hero">
+            <h1>Le Journal</h1>
+            <p class="subtitle">Écris un nom, l'encre fera le reste...</p>
+        </header>
+
+        <div style="width: 100%; max-width: 500px; margin: 0 auto; text-align: center;">
+
+            <input type="text" id="character-name" class="journal-input" placeholder="Ex: Gandalf, Dark Vador, Jinx..."
+                autocomplete="off">
+
+            <div style="margin-top: 30px;">
+                <button id="ask-journal-btn" class="btn">Laisser l'encre sécher</button>
+            </div>
+
+            <div id="journal-response" class="response-area">
+                <h3 id="response-alignment"></h3>
+                <p id="response-text"></p>
+            </div>
+
+        </div>
+    </main>
+
+    <script src="js/script.js"></script>
+</body>
+
+</html>
