@@ -1,6 +1,4 @@
-// Fonction serveur exécutée en tâche de fond par Netlify
 exports.handler = async function (event, context) {
-    // 1. Récupérer le nom du personnage envoyé par le site
     const characterName = event.queryStringParameters.name;
 
     if (!characterName) {
@@ -10,28 +8,23 @@ exports.handler = async function (event, context) {
         };
     }
 
-    // 2. Récupérer la clé API cachée dans l'environnement Netlify
     const apiKey = process.env.GEMINI_API_KEY;
 
     if (!apiKey) {
         return {
             statusCode: 500,
-            body: JSON.stringify({ error: "La clé de l'Oracle n'est pas configurée du côté serveur." })
+            body: JSON.stringify({ error: "La clé de l'Oracle n'est pas configurée." })
         };
     }
 
     try {
-        // 3. Envoyer la requête à l'IA avec un prompt précis de "Maître du Jeu"
-        const prompt = `Tu es le Journal Magique de Tom Jedusor combiné à un Maître du Jeu D&D expert. 
-        Analyse le personnage suivant : "${characterName}".
-        Donne uniquement son alignement officiel D&D (ex: "Légal Bon", "Chaotique Mauvais", "Neutre Strict", etc.) et une courte explication de 2-3 phrases maximum, écrite avec un style mystérieux et magique (comme si l'encre apparaissait sur du vieux papier).
-        Format de réponse obligatoire en JSON pur :
-        {
-            "alignment": "L'alignement textuel ici",
-            "analysis": "Ton explication de 2-3 phrases ici"
-        }`;
+        const prompt = `Analyse le personnage suivant : "${characterName}".
+        Donne son alignement officiel D&D (ex: "Légal Bon", "Chaotique Mauvais", etc.) et une courte explication de 2 phrases maximum, écrite avec un style mystérieux et magique.
+        Tu DOIS répondre UNIQUEMENT sous la forme d'un objet JSON valide, sans aucun texte avant ou après, et sans blocs de code markdown (pas de backticks \`\`\`).
+        Format exact attendu :
+        {"alignment": "L'alignement ici", "analysis": "Ton explication ici"}`;
 
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`;
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
         const response = await fetch(url, {
             method: 'POST',
@@ -43,17 +36,23 @@ exports.handler = async function (event, context) {
 
         const data = await response.json();
 
-        // Extraire le texte brut renvoyé par l'IA
-        const aiText = data.candidates[0].content.parts[0].text;
+        // Récupération sécurisée du texte de l'IA
+        let aiText = data.candidates[0].content.parts[0].text.trim();
 
-        // Nettoyer les éventuels backticks "```json" si l'IA en ajoute par réflexe
-        const cleanJson = aiText.replace(/```json|```/g, '').trim();
-        const result = JSON.parse(cleanJson);
+        // Nettoyage de sécurité au cas où l'IA met du markdown malgré tout
+        if (aiText.includes("```")) {
+            aiText = aiText.replace(/```json|```/g, "").trim();
+        }
 
-        // 4. Renvoyer la réponse propre à ton script.js
+        // On vérifie si c'est bien du JSON avant de l'envoyer au site
+        const result = JSON.parse(aiText);
+
         return {
             statusCode: 200,
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*"
+            },
             body: JSON.stringify(result)
         };
 
@@ -61,7 +60,7 @@ exports.handler = async function (event, context) {
         console.error("Erreur serveur :", error);
         return {
             statusCode: 500,
-            body: JSON.stringify({ error: "L'encre a bavé... Impossible de lire la réponse de l'IA." })
+            body: JSON.stringify({ error: "L'encre a bavé... Impossible de décoder la prophétie." })
         };
     }
 };
