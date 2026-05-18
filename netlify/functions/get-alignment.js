@@ -29,51 +29,58 @@ exports.handler = async function (event, context) {
         };
     }
 
-    try {
-        const prompt = `Analyse le personnage : "${characterName}". Donne son alignement officiel D&D et une courte explication de 2 phrases maximum, écrite avec un style mystérieux et magique. Tu DOIS répondre UNIQUEMENT sous la forme d'un objet JSON valide, sans aucun texte avant ou après, et sans aucun bloc de code markdown. Format exact attendu : {"alignment": "L'alignement ici", "analysis": "Ton explication ici"}`;
+    // Liste des modèles stables et actifs à tester l'un après l'autre
+    const modelsToTry = ["gemini-2.5-flash", "gemini-2.5-pro", "gemini-3-flash"];
+    let lastError = null;
 
-        // CORRECTION : Passage au modèle actif gemini-2.0-flash
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+    for (const model of modelsToTry) {
+        try {
+            const prompt = `Analyse le personnage : "${characterName}". Donne son alignement officiel D&D et une courte explication de 2 phrases maximum, écrite avec un style mystérieux et magique. Tu DOIS répondre UNIQUEMENT sous la forme d'un objet JSON valide, sans aucun texte avant ou après, et sans aucun bloc de code markdown. Format exact attendu : {"alignment": "L'alignement ici", "analysis": "Ton explication ici"}`;
 
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                contents: [{ parts: [{ text: prompt }] }]
-            })
-        });
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
 
-        if (!response.ok) {
-            throw new Error(`Erreur API Google: ${response.status}`);
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [{ parts: [{ text: prompt }] }]
+                })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                let aiText = data.candidates[0].content.parts[0].text.trim();
+
+                if (aiText.includes("```")) {
+                    aiText = aiText.replace(/```json|```/g, "").trim();
+                }
+
+                const result = JSON.parse(aiText);
+
+                return {
+                    statusCode: 200,
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Access-Control-Allow-Origin": "*"
+                    },
+                    body: JSON.stringify(result)
+                };
+            } else {
+                const errText = await response.text();
+                console.warn(`Le modèle ${model} a échoué, essai du suivant...`);
+                lastError = `Google API (${model}): ${response.status} - ${errText}`;
+            }
+        } catch (err) {
+            lastError = err.message;
         }
-
-        const data = await response.json();
-        let aiText = data.candidates[0].content.parts[0].text.trim();
-
-        if (aiText.includes("```")) {
-            aiText = aiText.replace(/```json|```/g, "").trim();
-        }
-
-        const result = JSON.parse(aiText);
-
-        return {
-            statusCode: 200,
-            headers: {
-                "Content-Type": "application/json",
-                "Access-Control-Allow-Origin": "*"
-            },
-            body: JSON.stringify(result)
-        };
-
-    } catch (error) {
-        console.error(error);
-        return {
-            statusCode: 500,
-            headers: { "Access-Control-Allow-Origin": "*" },
-            body: JSON.stringify({
-                error: "L'encre a bavé...",
-                details: error.message
-            })
-        };
     }
+
+    return {
+        statusCode: 500,
+        headers: { "Access-Control-Allow-Origin": "*" },
+        body: JSON.stringify({
+            error: "L'encre a bavé... Aucun modèle disponible.",
+            details: lastError
+        })
+    };
 };
