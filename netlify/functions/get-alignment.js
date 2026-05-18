@@ -1,5 +1,5 @@
 exports.handler = async function (event, context) {
-    // 1. Gestion du protocole CORS (sécurité des navigateurs)
+    // Gestion du protocole CORS pour éviter les blocages navigateurs
     if (event.httpMethod === "OPTIONS") {
         return {
             statusCode: 200,
@@ -31,41 +31,31 @@ exports.handler = async function (event, context) {
     }
 
     try {
-        // Prompt ultra-simplifié pour éviter que l'IA ne génère du texte parasite
-        const prompt = `Donne l'alignement D&D de "${characterName}" et explique pourquoi en 2 phrases. 
-        Tu dois UNIQUEMENT répondre avec ce format JSON strict, rien d'autre :
-        {"alignment": "Nom de l'alignement", "analysis": "Ton explication ici"}`;
+        const prompt = `Analyse le personnage : "${characterName}". Donne son alignement officiel D&D et une courte explication de 2 phrases maximum, écrite avec un style mystérieux et magique. Tu DOIS répondre UNIQUEMENT sous la forme d'un objet JSON valide, sans aucun texte avant ou après, et sans aucun bloc de code markdown. Format exact attendu : {"alignment": "L'alignement ici", "analysis": "Ton explication ici"}`;
 
-        // Utilisation du endpoint stable text-only de Gemini
-        const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+        // URL universelle et stable de l'API Gemini 1.5 Flash
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
         const response = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                contents: [{
-                    parts: [{ text: prompt }]
-                }]
+                contents: [{ parts: [{ text: prompt }] }]
             })
         });
 
         if (!response.ok) {
-            const errData = await response.text();
-            console.error("Erreur API Google:", errData);
-            throw new Error(`Google API a répondu avec un statut ${response.status}`);
+            throw new Error(`Erreur API Google: ${response.status}`);
         }
 
         const data = await response.json();
-
-        // Extraction native du texte brut
         let aiText = data.candidates[0].content.parts[0].text.trim();
 
-        // Nettoyage des backticks Markdown (```json ... ```) si l'IA en a mis
-        if (aiText.startsWith("```")) {
+        // Nettoyage de sécurité au cas où l'IA met du markdown malgré tout
+        if (aiText.includes("```")) {
             aiText = aiText.replace(/```json|```/g, "").trim();
         }
 
-        // Validation que la chaîne est bien du JSON valide avant envoi
         const result = JSON.parse(aiText);
 
         return {
@@ -78,7 +68,7 @@ exports.handler = async function (event, context) {
         };
 
     } catch (error) {
-        console.error("Erreur complète sur la fonction :", error);
+        console.error(error);
         return {
             statusCode: 500,
             headers: { "Access-Control-Allow-Origin": "*" },
