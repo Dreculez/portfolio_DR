@@ -1,50 +1,71 @@
 exports.handler = async function (event, context) {
-    const characterName = event.queryStringParameters.name;
+    // 1. Gestion du protocole CORS (sécurité des navigateurs)
+    if (event.httpMethod === "OPTIONS") {
+        return {
+            statusCode: 200,
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Headers": "Content-Type",
+                "Access-Control-Allow-Methods": "GET, POST, OPTIONS"
+            },
+            body: ""
+        };
+    }
 
+    const characterName = event.queryStringParameters.name;
     if (!characterName) {
         return {
             statusCode: 400,
+            headers: { "Access-Control-Allow-Origin": "*" },
             body: JSON.stringify({ error: "Le nom du personnage est requis." })
         };
     }
 
     const apiKey = process.env.GEMINI_API_KEY;
-
     if (!apiKey) {
         return {
             statusCode: 500,
+            headers: { "Access-Control-Allow-Origin": "*" },
             body: JSON.stringify({ error: "La clé de l'Oracle n'est pas configurée." })
         };
     }
 
     try {
-        const prompt = `Analyse le personnage suivant : "${characterName}".
-        Donne son alignement officiel D&D (ex: "Légal Bon", "Chaotique Mauvais", etc.) et une courte explication de 2 phrases maximum, écrite avec un style mystérieux et magique.
-        Tu DOIS répondre UNIQUEMENT sous la forme d'un objet JSON valide, sans aucun texte avant ou après, et sans blocs de code markdown (pas de backticks \`\`\`).
-        Format exact attendu :
-        {"alignment": "L'alignement ici", "analysis": "Ton explication ici"}`;
+        // Prompt ultra-simplifié pour éviter que l'IA ne génère du texte parasite
+        const prompt = `Donne l'alignement D&D de "${characterName}" et explique pourquoi en 2 phrases. 
+        Tu dois UNIQUEMENT répondre avec ce format JSON strict, rien d'autre :
+        {"alignment": "Nom de l'alignement", "analysis": "Ton explication ici"}`;
 
+        // Utilisation du endpoint stable text-only de Gemini
         const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
         const response = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                contents: [{ parts: [{ text: prompt }] }]
+                contents: [{
+                    parts: [{ text: prompt }]
+                }]
             })
         });
 
+        if (!response.ok) {
+            const errData = await response.text();
+            console.error("Erreur API Google:", errData);
+            throw new Error(`Google API a répondu avec un statut ${response.status}`);
+        }
+
         const data = await response.json();
 
-        // Récupération sécurisée du texte de l'IA
+        // Extraction native du texte brut
         let aiText = data.candidates[0].content.parts[0].text.trim();
 
-        // Nettoyage de sécurité au cas où l'IA met du markdown malgré tout
-        if (aiText.includes("```")) {
+        // Nettoyage des backticks Markdown (```json ... ```) si l'IA en a mis
+        if (aiText.startsWith("```")) {
             aiText = aiText.replace(/```json|```/g, "").trim();
         }
 
-        // On vérifie si c'est bien du JSON avant de l'envoyer au site
+        // Validation que la chaîne est bien du JSON valide avant envoi
         const result = JSON.parse(aiText);
 
         return {
@@ -57,10 +78,14 @@ exports.handler = async function (event, context) {
         };
 
     } catch (error) {
-        console.error("Erreur serveur :", error);
+        console.error("Erreur complète sur la fonction :", error);
         return {
             statusCode: 500,
-            body: JSON.stringify({ error: "L'encre a bavé... Impossible de décoder la prophétie." })
+            headers: { "Access-Control-Allow-Origin": "*" },
+            body: JSON.stringify({
+                error: "L'encre a bavé...",
+                details: error.message
+            })
         };
     }
 };
