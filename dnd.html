@@ -39,6 +39,75 @@
     </main>
 
     <script src="js/script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const LOCAL_HEROES = {
+                "superman": {
+                    alignment: "Légal Bon (Lawful Good)",
+                    analysis: "Le Journal s'illumine d'une aura d'or pur. Superman incarne la justice absolue, protégeant les faibles et respectant un code moral indéfectible."
+                },
+                "jinx": {
+                    alignment: "Chaotique Mauvais (Chaotic Evil)",
+                    analysis: "Des éclats de rire déments semblent s'échapper des pages. Jinx ne cherche que le chaos pur, la destruction et le plaisir de voir tout exploser."
+                },
+                "gandalf": {
+                    alignment: "Neutre Bon (Neutral Good)",
+                    analysis: "Une douce lueur argentée traverse l'encre. Le Magicien Gris agit pour le bien de tous, se souciant peu des lois tant que l'Ombre est repoussée."
+                },
+                "batman": {
+                    alignment: "Légal Neutre (Lawful Neutral)",
+                    analysis: "L'encre devient noire comme la nuit. Travaillant dans l'ombre, il suit sa propre règle absolue pour imposer sa justice."
+                },
+                "skyline": {
+                    alignment: "Neutre Strict (True Neutral)",
+                    analysis: "Les pages restent sereines. Ce profil préfère préserver l'équilibre du monde plutôt que de prendre parti dans les conflits des mortels."
+                },
+                "shyvana": {
+                    alignment: "Chaotique Neutre (Chaotic Neutral)",
+                    analysis: "Une chaleur ardente émane du parchemin. Guidée par son sang de dragon, Shyvana oscille entre destruction sauvage et loyauté envers ses rares alliés."
+                },
+                "miss fortune": {
+                    alignment: "Chaotique Neutre (Chaotic Neutral)",
+                    analysis: "Une odeur de poudre envahit la pièce. Chasseuse de primes impitoyable, elle dicte ses propres lois à Bilgewater pour assouvir sa vengeance."
+                }
+            };
+
+            const btn = document.getElementById('ask-journal-btn');
+            if (btn) {
+                btn.addEventListener('click', () => {
+                    const input = document.querySelector('.journal-input');
+                    const responseArea = document.querySelector('.response-area');
+                    const characterName = input ? input.value.trim() : '';
+
+                    if (!characterName) return;
+
+                    if (responseArea) {
+                        responseArea.innerHTML = "<p class='magic-text'>L'Oracle consulte les astres...</p>";
+                        responseArea.classList.add('show');
+                        responseArea.style.display = 'block';
+                        responseArea.style.opacity = '1';
+                    }
+
+                    const cleanName = characterName.toLowerCase();
+
+                    setTimeout(() => {
+                        if (LOCAL_HEROES[cleanName]) {
+                            responseArea.innerHTML = `
+                        <h3 class="alignment-title" style="color: #f3f0df; font-family: 'Cinzel', serif; margin-bottom: 15px; text-align: center;">${LOCAL_HEROES[cleanName].alignment}</h3>
+                        <p class="alignment-desc" style="font-style: italic; color: rgba(243, 240, 223, 0.8); text-align: center; max-width: 500px; margin: 0 auto;">${LOCAL_HEROES[cleanName].analysis}</p>
+                    `;
+                        } else {
+                            // Réponse magique par défaut pour TOUS les autres noms -> Évite les erreurs !
+                            responseArea.innerHTML = `
+                        <h3 class="alignment-title" style="color: #f3f0df; font-family: 'Cinzel', serif; margin-bottom: 15px; text-align: center;">Alignement Incertain</h3>
+                        <p class="alignment-desc" style="font-style: italic; color: rgba(243, 240, 223, 0.8); text-align: center; max-width: 500px; margin: 0 auto;">Les brumes de l'Oracle hésitent pour "${characterName}". Son destin n'est pas encore gravé dans les pages de ce journal ancien.</p>
+                    `;
+                        }
+                    }, 800);
+                });
+            }
+        });
+    </script>
 </body>
 
 </html>
