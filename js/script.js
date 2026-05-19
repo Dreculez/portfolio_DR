@@ -1,34 +1,41 @@
-// 1. GESTION DES PARCHEMINS (PROJETS)
+// ==========================================================================
+// 1. GESTION DES ACCORDÉONS (PARCHEMINS)
+// ==========================================================================
 document.querySelectorAll('.project-card').forEach(card => {
     card.addEventListener('click', function () {
         this.classList.toggle('is-open');
 
-        const chevron = this.querySelector('.icon-chevron');
+        // Correction BEM du sélecteur du chevron
+        const chevron = this.querySelector('.project-card__chevron');
         if (chevron) {
             chevron.textContent = this.classList.contains('is-open') ? '▲' : '▼';
         }
     });
 });
 
-// 2. GESTION DU POP-UP IMAGES (LIGHTBOX)
+// ==========================================================================
+// 2. GESTION DE LA VISIONNEUSE INTERACTIVE (LIGHTBOX MODALE)
+// ==========================================================================
 const modal = document.getElementById("image-modal");
 const modalImg = document.getElementById("img-in-modal");
-const closeModal = document.querySelector(".close-modal");
+const counter = document.getElementById("modal-counter");
+
+// Correction BEM du sélecteur pour la croix de fermeture
+const closeModal = document.querySelector(".modal__close");
 const prevBtn = document.getElementById("prev-img");
 const nextBtn = document.getElementById("next-img");
-const counter = document.getElementById("modal-counter");
 
 let currentGallery = [];
 let currentIndex = 0;
 
 if (modal && modalImg) {
-    // Ouverture au clic sur une miniature
-    document.querySelectorAll('.mini-gallery img').forEach(img => {
+    // Ouverture au clic sur une miniature (Correction BEM du sélecteur d'image)
+    document.querySelectorAll('.mini-gallery__img').forEach(img => {
         img.addEventListener('click', function (e) {
             e.stopPropagation(); // Empêche le clic de fermer le parchemin en dessous
 
             const gallery = this.closest('.mini-gallery');
-            currentGallery = Array.from(gallery.querySelectorAll('img'));
+            currentGallery = Array.from(gallery.querySelectorAll('.mini-gallery__img'));
             currentIndex = currentGallery.indexOf(this);
 
             updateModal();
@@ -44,7 +51,7 @@ if (modal && modalImg) {
         }
     }
 
-    // Navigation (Précédent / Suivant)
+    // Navigation (Précédent)
     if (prevBtn) {
         prevBtn.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -53,6 +60,7 @@ if (modal && modalImg) {
         });
     }
 
+    // Navigation (Suivant)
     if (nextBtn) {
         nextBtn.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -66,9 +74,9 @@ if (modal && modalImg) {
         closeModal.addEventListener('click', () => modal.classList.remove('show'));
     }
 
-    // Fermeture en cliquant dans le vide
+    // Fermeture en cliquant dans le vide (Correction BEM pour l'arrière-plan)
     window.addEventListener('click', (e) => {
-        if (e.target === modal || (e.target.classList && e.target.classList.contains('modal-nav'))) {
+        if (e.target === modal || (e.target.classList && e.target.classList.contains('modal__nav'))) {
             modal.classList.remove('show');
         }
     });

@@ -2,7 +2,6 @@
     --bg-color: #1a1a1d;
     --card-color: #3a3541;
     --text-color: #f3f0df;
-    /* Ton beige clair */
     --accent-color: rgba(243, 240, 223, 0.6);
 }
 
@@ -23,30 +22,118 @@ body {
     padding: 20px;
 }
 
-/* Header Accueil */
+/* ==========================================================================
+   Bloc : Navigation principale (.top-nav)
+   ========================================================================== */
+.top-nav {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 20px;
+}
+
+.top-nav__link {
+    font-family: 'Cinzel', serif;
+    color: var(--text-color);
+    text-decoration: none;
+    font-size: 0.8rem;
+    opacity: 0.6;
+    transition: 0.3s;
+}
+
+@media (min-width: 768px) {
+    .top-nav {
+        right: 0;
+        top: 0;
+        justify-content: flex-end;
+        padding: 30px 60px;
+        background: linear-gradient(to bottom, rgba(26, 26, 29, 0.8), transparent);
+        position: fixed;
+        z-index: 1000;
+        width: 100%;
+    }
+
+    .top-nav__link {
+        font-size: 1rem;
+        margin-left: 40px;
+        opacity: 0.7;
+    }
+
+    .top-nav__link:hover {
+        opacity: 1;
+        text-decoration: underline;
+    }
+}
+
+/* ==========================================================================
+   Bloc : Section Hero (.hero)
+   ========================================================================== */
 .hero {
     text-align: center;
     padding: 60px 0;
     max-width: 600px;
 }
 
-h1 {
+.hero__avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 2px solid var(--accent-color);
+    object-fit: cover;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+.hero__title {
     font-family: 'Cinzel', serif;
     font-size: 2.5rem;
     margin-bottom: 10px;
 }
 
-.subtitle {
+.hero__subtitle {
     opacity: 0.8;
     font-weight: 300;
 }
 
-/* Parchemins / Stèles */
+.hero__separator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 30px auto 10px auto;
+    width: 100%;
+    max-width: 300px;
+}
+
+.hero__separator::before,
+.hero__separator::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid var(--accent-color);
+}
+
+.hero__diamond {
+    width: 10px;
+    height: 10px;
+    background-color: var(--accent-color);
+    transform: rotate(45deg);
+    margin: 0 15px;
+}
+
+/* ==========================================================================
+   Bloc : Cartes de projet (.project-card)
+   ========================================================================== */
+.projects-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .project-card {
     background-color: var(--card-color);
     width: 100%;
     max-width: 600px;
-    /* Limite la largeur sur Desktop */
     margin-bottom: 20px;
     border-radius: 20px 20px 5px 5px;
     overflow: hidden;
@@ -54,27 +141,19 @@ h1 {
     border: 1px solid rgba(243, 240, 223, 0.1);
 }
 
-.project-header {
+.project-card__header {
     padding: 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.project-header h2 {
+.project-card__title {
     font-family: 'Cinzel', serif;
     font-size: 1.2rem;
 }
 
-/* Animation d'ouverture */
-/* .project-content {
-    max-height: 0;
-    transition: max-height 0.4s ease-out;
-    background-color: rgba(0, 0, 0, 0.1);
-} */
-
-/* Animation du parchemin */
-.project-content {
+.project-card__content {
     max-height: 0;
     overflow: hidden;
     opacity: 0;
@@ -84,32 +163,160 @@ h1 {
     background-color: rgba(0, 0, 0, 0.1);
 }
 
-.project-card.is-open .project-content {
+.project-card.is-open .project-card__content {
     max-height: 2000px;
-    /* Assez grand pour laisser la place aux images */
     opacity: 1;
     transform: scaleY(1);
 }
 
-/* Style des sous-titres des projets */
-.sub-project h3 {
+.project-card__inner {
+    padding: 20px;
+    border-top: 1px solid rgba(243, 240, 223, 0.1);
+}
+
+.project-card__roles {
+    margin-bottom: 15px;
+}
+
+/* Éléments des compétences (Tags) */
+.project-card__tags {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 25px;
+    align-items: center;
+}
+
+.project-card__tag {
+    font-size: 0.85em;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 6px 12px;
+    border-radius: 20px;
+}
+
+/* Listes de tâches */
+.project-card__list {
+    list-style-type: disc;
+    padding-left: 20px;
+    margin-bottom: 25px;
+    line-height: 1.6;
+}
+
+.project-card__btn-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.project-card__divider {
+    border: 0;
+    border-bottom: 1px solid rgba(243, 240, 223, 0.1);
+    margin: 20px 0;
+}
+
+/* ==========================================================================
+   Bloc interne : Sous-projets (.sub-project)
+   ========================================================================== */
+.sub-project__title {
     font-family: 'Cinzel', serif;
     font-size: 1.1rem;
     margin-bottom: 10px;
     color: var(--accent-color);
 }
 
-/* .project-card.is-open .project-content {
-    max-height: 500px;
-    /* Ajuste selon le contenu */
+/* ==========================================================================
+   Bloc réutilisable : Galerie de miniatures (.mini-gallery)
+   ========================================================================== */
+.mini-gallery {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    margin-bottom: 25px;
 }
 
-*/ .project-inner {
-    padding: 20px;
-    border-top: 1px solid rgba(243, 240, 223, 0.1);
+.mini-gallery__img {
+    flex: 1;
+    width: 30%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: opacity 0.3s;
 }
 
-/* Boutons */
+.mini-gallery__img:hover {
+    opacity: 0.8;
+}
+
+/* ==========================================================================
+   Bloc : Section Scribe (.scribe)
+   ========================================================================== */
+.page-scribe {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.scribe {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    text-align: center;
+    padding: 40px;
+}
+
+.scribe__title {
+    font-family: 'Cinzel', serif;
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    opacity: 0.8;
+}
+
+.scribe__quote {
+    font-size: 1.5rem;
+    font-style: italic;
+    max-width: 800px;
+    color: var(--text-color);
+    line-height: 1.8;
+}
+
+/* ==========================================================================
+   Bloc : Section Contact (.contact)
+   ========================================================================== */
+.contact {
+    padding-top: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 40px;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.contact__title {
+    font-family: 'Cinzel', serif;
+    font-size: 2.5rem;
+}
+
+.contact__cv-img {
+    max-width: 90%;
+    width: 600px;
+    border-radius: 10px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(243, 240, 223, 0.2);
+}
+
+.contact__links {
+    margin-bottom: 50px;
+}
+
+/* ==========================================================================
+   Bloc : Boutons Globaux (.btn)
+   ========================================================================== */
 .btn {
     display: inline-block;
     margin-top: 15px;
@@ -121,6 +328,8 @@ h1 {
     font-family: 'Cinzel', serif;
     font-size: 0.9rem;
     transition: 0.3s;
+    background: transparent;
+    cursor: pointer;
 }
 
 .btn:hover {
@@ -128,130 +337,21 @@ h1 {
     color: var(--card-color);
 }
 
-/* Centrage pour Le Scribe */
-.page-scribe .centered-content {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    text-align: center;
-    padding: 40px;
+.btn--secondary {
+    border-color: var(--accent-color);
+    color: var(--accent-color);
 }
 
-.scribe-title {
-    margin-bottom: 30px;
-    opacity: 0.8;
+.btn--secondary:hover {
+    background: var(--accent-color);
+    color: var(--bg-color);
 }
 
-.description {
-    font-size: 1.5rem;
-    font-style: italic;
-    max-width: 800px;
-    color: var(--text-color);
-    line-height: 1.8;
-}
-
-/* Style pour la page Contact */
-.contact-container {
-    padding-top: 100px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    /* Centre les éléments à l'intérieur */
-    text-align: center;
-    gap: 40px;
-    width: 100%;
-    max-width: 600px;
-    /* Aligné sur la largeur de tes stèles */
-    margin: 0 auto;
-    /* Centre le bloc entier dans la page */
-}
-
-.cv-img {
-    max-width: 90%;
-    width: 600px;
-    border-radius: 10px;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-    border: 1px solid rgba(243, 240, 223, 0.2);
-}
-
-.contact-links {
-    margin-bottom: 50px;
-}
-
-/* 1. Version Mobile (Le style par défaut) */
-.top-nav {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    /* Aligné à droite sur téléphone */
-    display: flex;
-    gap: 20px;
-}
-
-.top-nav a {
-    font-family: 'Cinzel', serif;
-    color: var(--text-color);
-    text-decoration: none;
-    font-size: 0.8rem;
-    opacity: 0.6;
-    transition: 0.3s;
-}
-
-/* 2. Version Desktop (Le bloc qui remplace l'ancien @media) */
-@media (min-width: 768px) {
-    .top-nav {
-        right: 0;
-        top: 0;
-        justify-content: flex-end;
-        /* Pousse les liens vers la droite */
-        padding: 30px 60px;
-        background: linear-gradient(to bottom, rgba(26, 26, 29, 0.8), transparent);
-        position: fixed;
-        z-index: 1000;
-        width: 100%;
-    }
-
-    .top-nav a {
-        font-size: 1rem;
-        margin-left: 40px;
-        /* Espace entre les liens */
-        opacity: 0.7;
-    }
-
-    .top-nav a:hover {
-        opacity: 1;
-        text-decoration: underline;
-    }
-}
-
-/* Galerie de miniatures cliquables */
-.mini-gallery {
-    display: flex;
-    gap: 10px;
-    margin-top: 15px;
-}
-
-.mini-gallery img {
-    flex: 1;
-    width: 30%;
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
-    /* Coupe proprement en carré pour la miniature */
-    border-radius: 8px;
-    cursor: pointer;
-    transition: opacity 0.3s;
-}
-
-.mini-gallery img:hover {
-    opacity: 0.8;
-}
-
-/* Style du Pop-up (Modal) */
+/* ==========================================================================
+   Bloc : Visionneuse Modale (.modal)
+   ========================================================================== */
 .modal {
     display: none;
-    /* Caché par défaut */
     position: fixed;
     z-index: 2000;
     left: 0;
@@ -267,19 +367,17 @@ h1 {
 
 .modal.show {
     display: flex;
-    /* S'affiche quand la classe est ajoutée */
 }
 
-.modal-content {
+.modal__content {
     max-width: 100%;
     max-height: 80vh;
     border-radius: 8px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
     object-fit: contain;
-    /* Assure que l'image n'est pas coupée dans le pop-up */
 }
 
-.close-modal {
+.modal__close {
     position: absolute;
     top: 15px;
     right: 25px;
@@ -289,8 +387,7 @@ h1 {
     cursor: pointer;
 }
 
-/* Navigation du Pop-up */
-.modal-nav {
+.modal__nav {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -298,7 +395,7 @@ h1 {
     position: relative;
 }
 
-.nav-btn {
+.modal__btn {
     background: rgba(0, 0, 0, 0.6);
     color: var(--text-color);
     border: 1px solid rgba(243, 240, 223, 0.2);
@@ -311,137 +408,24 @@ h1 {
     transition: 0.3s;
 }
 
-.nav-btn:hover {
+.modal__btn:hover {
     background: rgba(0, 0, 0, 0.9);
 }
 
-#prev-img {
+.modal__btn--prev {
     left: 10px;
 }
 
-#next-img {
+.modal__btn--next {
     right: 10px;
 }
 
-.img-counter {
+.modal__counter {
     position: relative;
-    /* <-- Au lieu de absolute */
     margin-top: 20px;
-    /* <-- Espace entre l'image et le texte */
     color: var(--text-color);
     font-family: 'Cinzel', serif;
     font-size: 1.2rem;
     letter-spacing: 2px;
     z-index: 2010;
-}
-
-/* Avatar du Hero */
-.hero-avatar {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    border: 2px solid var(--accent-color);
-    object-fit: cover;
-    margin-bottom: 20px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-}
-
-/* Séparateur Ornemental (Ligne + Losange) */
-.separator {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 30px auto 10px auto;
-    /* "auto" centre l'élément horizontalement */
-    width: 100%;
-    max-width: 300px;
-}
-
-.separator::before,
-.separator::after {
-    content: '';
-    flex: 1;
-    border-bottom: 1px solid var(--accent-color);
-}
-
-.separator .diamond {
-    width: 10px;
-    height: 10px;
-    background-color: var(--accent-color);
-    transform: rotate(45deg);
-    margin: 0 15px;
-}
-
-<button id="copy-email-btn" class="btn">Envoyer un Pigeon</button>
-/* --- Interface du Journal Magique --- */
-
-.journal-input {
-    width: 100%;
-    background: transparent;
-    border: none;
-    border-bottom: 2px solid rgba(243, 240, 223, 0.3);
-    /* Ligne discrète */
-    color: var(--text-color);
-    font-family: 'Cinzel', serif;
-    font-size: 1.5rem;
-    padding: 10px;
-    text-align: center;
-    outline: none;
-    transition: 0.3s;
-}
-
-.journal-input:focus {
-    border-bottom-color: var(--accent-color);
-    /* S'illumine quand on clique dessus */
-}
-
-/* Zone de réponse de l'IA */
-.response-area {
-    margin-top: 40px;
-    padding-top: 30px;
-    border-top: 1px solid var(--accent-color);
-    opacity: 0;
-    /* Caché par défaut */
-    transform: translateY(10px);
-    transition: all 0.8s ease-in-out;
-    /* Effet d'apparition douce (encre) */
-    display: none;
-}
-
-.response-area.show {
-    display: block;
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.response-area h3 {
-    font-family: 'Cinzel', serif;
-    color: var(--accent-color);
-    margin-bottom: 15px;
-}
-
-.response-area p {
-    font-style: italic;
-    line-height: 1.6;
-}
-
-/* Force les balises bouton à avoir le même style que tes liens .btn */
-button#ask-journal-btn.btn {
-    background: transparent;
-    color: var(--text-color);
-    border: 1px solid var(--accent-color);
-    font-family: 'Cinzel', serif;
-    font-size: 1rem;
-    padding: 10px 20px;
-    border-radius: 0;
-    /* Aligné sur le style de tes stèles si nécessaire */
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-/* Effet au survol propre */
-button#ask-journal-btn.btn:hover {
-    background: rgba(243, 240, 223, 0.1);
-    /* Léger voile beige/doré */
-    color: var(--accent-color);
 }

@@ -11,59 +11,56 @@
 </head>
 
 <body>
+
     <nav class="top-nav">
-        <a href="about.html">Le Scribe</a>
-        <a href="contact.html">Contact</a>
-
+        <a href="about.html" class="top-nav__link">Le Scribe</a>
+        <a href="contact.html" class="top-nav__link">Contact</a>
     </nav>
+
     <header class="hero">
-        <img src="assets/caricaturechat.png" alt="Portrait Damien" class="hero-avatar">
+        <img src="assets/caricaturechat.png" alt="Portrait Damien" class="hero__avatar">
+        <h1 class="hero__title">Damien</h1>
+        <p class="hero__subtitle">Designer UX/UI — Créateur d'interfaces immersives.</p>
 
-        <h1>Damien</h1>
-        <p class="subtitle">Designer UX/UI — Créateur d'interfaces immersives.</p>
-
-        <div class="separator">
-            <span class="diamond"></span>
+        <div class="hero__separator">
+            <span class="hero__diamond"></span>
         </div>
 
-        <div class="scroll-hint">
-            <span>Découvrir mes travaux</span>
-            <div class="chevron"></div>
+        <div class="hero__scroll-hint">
+            <span class="hero__scroll-text">Découvrir mes travaux</span>
+            <div class="hero__chevron"></div>
         </div>
     </header>
 
-    <main class="projects">
+    <main class="projects-container">
+
         <article class="project-card" id="haricots">
-            <header class="project-header">
-                <h2>Le Début Des Haricots</h2>
-                <span class="icon-chevron">▼</span>
+            <header class="project-card__header">
+                <h2 class="project-card__title">Le Début Des Haricots</h2>
+                <span class="project-card__chevron">▼</span>
             </header>
-            <div class="project-content">
-                <div class="project-inner">
-                    <p style="margin-bottom: 15px;"><strong>Rôles :</strong> Design UX/UI, Intégration Web &
+            <div class="project-card__content">
+                <div class="project-card__inner">
+                    <p class="project-card__roles"><strong>Rôles :</strong> Design UX/UI, Intégration Web &
                         Communication</p>
 
-                    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 25px; align-items: center;">
-                        <span
-                            style="font-size: 0.85em; background: rgba(255, 255, 255, 0.15); padding: 6px 12px; border-radius: 20px;">Figma</span>
-                        <span
-                            style="font-size: 0.85em; background: rgba(255, 255, 255, 0.15); padding: 6px 12px; border-radius: 20px;">HTML/CSS/JS/PHP</span>
-                        <span
-                            style="font-size: 0.85em; background: rgba(255, 255, 255, 0.15); padding: 6px 12px; border-radius: 20px;">Meta
-                            Business</span>
+                    <div class="project-card__tags">
+                        <span class="project-card__tag">Figma</span>
+                        <span class="project-card__tag">HTML/CSS/JS/PHP</span>
+                        <span class="project-card__tag">Meta Business</span>
                     </div>
 
-                    <ul style="list-style-type: disc; padding-left: 20px; margin-bottom: 25px; line-height: 1.6;">
-                        <li>Conception des wireframes et maquettage du site.</li>
-                        <li>Intégration front-end mobile-first.</li>
-                        <li>Gestion de la communication digitale (Pages Facebook).</li>
+                    <ul class="project-card__list">
+                        <li class="project-card__item">Conception des wireframes et maquettage du site.</li>
+                        <li class="project-card__item">Intégration front-end mobile-first.</li>
+                        <li class="project-card__item">Gestion de la communication digitale (Pages Facebook).</li>
                     </ul>
 
-                    <div class="mini-gallery" style="margin-bottom: 25px;">
-                        <img src="assets/ddh1.png" alt="Écran Projets">
-                        <img src="assets/ddh2.png" alt="Écran Ferme">
-                        <img src="assets/ddh3.png" alt="Menu déroulant">
-                        <img src="assets/ddh4.png" alt="Écran Accueil">
+                    <div class="mini-gallery project-card__gallery">
+                        <img src="assets/ddh1.png" alt="Écran Projets" class="mini-gallery__img">
+                        <img src="assets/ddh2.png" alt="Écran Ferme" class="mini-gallery__img">
+                        <img src="assets/ddh3.png" alt="Menu déroulant" class="mini-gallery__img">
+                        <img src="assets/ddh4.png" alt="Écran Accueil" class="mini-gallery__img">
                     </div>
 
                     <a href="https://2026.haricots.org/" target="_blank" class="btn">Voir le site</a>
@@ -72,56 +69,58 @@
         </article>
 
         <article class="project-card" id="badhat">
-            <header class="project-header">
-                <h2>Badhat</h2>
-                <span class="icon-chevron">▼</span>
+            <header class="project-card__header">
+                <h2 class="project-card__title">Badhat</h2>
+                <span class="project-card__chevron">▼</span>
             </header>
-            <div class="project-content">
-                <div class="project-inner">
-                    <p><strong>Rôle :</strong> Lead Design (Hackathon)</p>
-                    <ul>
-                        <li>Recherche utilisateur & Parcours</li>
-                        <li>Design UI en 72h</li>
+            <div class="project-card__content">
+                <div class="project-card__inner">
+                    <p class="project-card__roles"><strong>Rôle :</strong> Lead Design (Hackathon)</p>
+                    <ul class="project-card__list">
+                        <li class="project-card__item">Recherche utilisateur & Parcours</li>
+                        <li class="project-card__item">Design UI en 72h</li>
                     </ul>
-                    <div class="btn-group">
+                    <div class="project-card__btn-group">
                         <a href="https://hnadler12.github.io/Hackathon/#home" target="_blank" class="btn">Voir le
                             site</a>
                         <a href="https://www.figma.com/board/C7d6aplbDrK8q9iVAB3vY0/Untitled?node-id=0-1"
-                            target="_blank" class="btn secondary">Recherche Figma</a>
+                            target="_blank" class="btn btn--secondary">Recherche Figma</a>
                     </div>
                 </div>
             </div>
         </article>
+
         <article class="project-card" id="projets-formation">
-            <header class="project-header">
-                <h2>Design UI - Projets Formation</h2>
-                <span class="icon-chevron">▼</span>
+            <header class="project-card__header">
+                <h2 class="project-card__title">Design UI - Projets Formation</h2>
+                <span class="project-card__chevron">▼</span>
             </header>
-            <div class="project-content">
-                <div class="project-inner">
+            <div class="project-card__content">
+                <div class="project-card__inner">
 
                     <div class="sub-project">
-                        <h3>Projet 1 : Jalon</h3>
-                        <p>L'application Jalon est une plateforme de soutien par les pairs qui comble l'écart
-                            d'expérience pour les personnes faisant face à une pathologie donnée.</p>
-                        <div class="mini-gallery">
-                            <img src="assets/jalon1.png" alt="Visuel 1">
-                            <img src="assets/jalon2.png" alt="Visuel 2">
-                            <img src="assets/jalon3.png" alt="Visuel 3">
+                        <h3 class="sub-project__title">Projet 1 : Jalon</h3>
+                        <p class="sub-project__description">L'application Jalon est une plateforme de soutien par les
+                            pairs qui comble l'écart d'expérience pour les personnes faisant face à une pathologie
+                            donnée.</p>
+                        <div class="mini-gallery sub-project__gallery">
+                            <img src="assets/jalon1.png" alt="Visuel 1" class="mini-gallery__img">
+                            <img src="assets/jalon2.png" alt="Visuel 2" class="mini-gallery__img">
+                            <img src="assets/jalon3.png" alt="Visuel 3" class="mini-gallery__img">
                         </div>
                     </div>
 
-                    <hr style="border: 0; border-bottom: 1px solid rgba(243, 240, 223, 0.1); margin: 20px 0;">
+                    <div class="project-card__divider"></div>
 
                     <div class="sub-project">
-                        <h3>Projet 2 : Croque Madame</h3>
-                        <p>Croque-Madame est une entreprise funéraire, aux multiples casquettes,
-                            travaillant de manière holistique et engagée — services funéraires, accompagnement
-                            au deuil, rituels funéraires multiculturels et inclusifs.</p>
-                        <div class="mini-gallery">
-                            <img src="assets/croque1.png" alt="Visuel 1">
-                            <img src="assets/croque2.png" alt="Visuel 2">
-                            <img src="assets/croque3.png" alt="Visuel 3">
+                        <h3 class="sub-project__title">Projet 2 : Croque Madame</h3>
+                        <p class="sub-project__description">Croque-Madame est une entreprise funéraire, aux multiples
+                            casquettes, travaillant de manière holistique et engagée — services funéraires,
+                            accompagnement au deuil, rituels funéraires multiculturels et inclusifs.</p>
+                        <div class="mini-gallery sub-project__gallery">
+                            <img src="assets/croque1.png" alt="Visuel 1" class="mini-gallery__img">
+                            <img src="assets/croque2.png" alt="Visuel 2" class="mini-gallery__img">
+                            <img src="assets/croque3.png" alt="Visuel 3" class="mini-gallery__img">
                         </div>
                     </div>
 
@@ -130,17 +129,18 @@
         </article>
 
     </main>
-    <div id="image-modal" class="modal">
-        <span class="close-modal">&times;</span>
-        <div class="modal-nav">
-            <button id="prev-img" class="nav-btn">&#10094;</button> <img class="modal-content" id="img-in-modal"
-                alt="Visuel en grand">
-            <button id="next-img" class="nav-btn">&#10095;</button>
-        </div>
-        <div id="modal-counter" class="img-counter">1 / 3</div>
-    </div>
-    <script src="js/script.js"></script>
 
+    <div id="image-modal" class="modal">
+        <span class="modal__close">&times;</span>
+        <div class="modal__nav">
+            <button id="prev-img" class="modal__btn modal__btn--prev">&#10094;</button>
+            <img class="modal__content" id="img-in-modal" alt="Visuel en grand">
+            <button id="next-img" class="modal__btn modal__btn--next">&#10095;</button>
+        </div>
+        <div id="modal-counter" class="modal__counter">1 / 3</div>
+    </div>
+
+    <script src="js/script.js"></script>
 </body>
 
 </html>
