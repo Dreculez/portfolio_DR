@@ -73,52 +73,48 @@ if (modal && modalImg) {
         }
     });
 }
-// --- GESTION DU JOURNAL MAGIQUE (VRAI APPEL NETLIFY) ---
-const askBtn = document.getElementById('ask-journal-btn');
-const nameInput = document.getElementById('character-name');
-const responseArea = document.getElementById('journal-response');
-const alignTitle = document.getElementById('response-alignment');
-const alignText = document.getElementById('response-text');
+// --- PARTIE JOURNAL MAGIQUE (CLOUDFLARE) ---
+const btnJournal = document.getElementById('ask-journal-btn');
 
-if (askBtn && nameInput && responseArea) {
-    askBtn.addEventListener('click', async () => {
-        const character = nameInput.value.trim();
+if (btnJournal) {
+    btnJournal.addEventListener('click', async () => {
+        const input = document.querySelector('.journal-input');
+        const responseArea = document.querySelector('.response-area');
+        const characterName = input ? input.value.trim() : '';
 
-        if (character === '') {
-            alert("Il faut d'abord écrire un nom pour que l'encre réagisse !");
-            return;
+        if (!characterName) return;
+
+        // Affichage du chargement
+        if (responseArea) {
+            responseArea.innerHTML = "<p class='magic-text'>L'Oracle consulte les astres...</p>";
+            responseArea.classList.add('show');
+            responseArea.style.display = 'block';
+            responseArea.style.opacity = '1';
         }
 
-        // 1. État de chargement
-        const originalText = askBtn.innerText;
-        askBtn.innerText = "L'encre s'imprègne...";
-        askBtn.disabled = true;
-        askBtn.style.opacity = "0.7";
-        responseArea.classList.remove('show');
+        // REMPLACE CETTE URL PAR TON LIEN CLOUDFLARE WORKER
+        const WORKER_URL = "https://twilight-haze-be56.damien-reculez.workers.dev/";
 
         try {
-            // 2. Appel à notre future Netlify Function sécurisée
-            const response = await fetch(`/.netlify/functions/get-alignment?name=${encodeURIComponent(character)}`);
-            const data = await response.json();
+            const response = await fetch(WORKER_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ characterName: characterName })
+            });
+
+            const result = await response.json();
 
             if (response.ok) {
-                // 3. Affichage des vraies données renvoyées par l'IA
-                alignTitle.innerText = data.alignment;
-                alignText.innerText = data.analysis;
+                responseArea.innerHTML = `
+                    <h3 class="alignment-title" style="color: #f3f0df; font-family: 'Cinzel', serif; margin-bottom: 15px; text-align: center;">${result.alignment}</h3>
+                    <p class="alignment-desc" style="font-style: italic; color: rgba(243, 240, 223, 0.8); text-align: center; max-width: 500px; margin: 0 auto;">${result.analysis}</p>
+                `;
             } else {
-                alignTitle.innerText = "Le journal reste muet...";
-                alignText.innerText = data.error || "Une ombre plane sur l'encre. Réessaye plus tard.";
+                throw new Error(result.error);
             }
-        } catch (error) {
-            console.error("Erreur :", error);
-            alignTitle.innerText = "Le journal reste muet...";
-            alignText.innerText = "Impossible de se connecter aux esprits. Vérifie ta connexion.";
-        }
 
-        // 4. Fin du chargement
-        responseArea.classList.add('show');
-        askBtn.innerText = originalText;
-        askBtn.disabled = false;
-        askBtn.style.opacity = "1";
+        } catch (error) {
+            responseArea.innerHTML = "<p class='error-text' style='text-align: center; color: red;'>Les astres sont brouillés, essaie un autre nom.</p>";
+        }
     });
 }
